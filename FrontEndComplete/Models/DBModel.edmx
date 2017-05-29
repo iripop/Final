@@ -1,0 +1,440 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BloodDonorDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Donation">
+          <Key>
+            <PropertyRef Name="DonationID" />
+          </Key>
+          <Property Name="DonationID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DonationType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CrossBloodType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CrossRhFactor" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ExpirationDate" Type="date" Nullable="false" />
+          <Property Name="NumberOfUnits" Type="float" Nullable="false" />
+          <Property Name="DonationSiteID" Type="int" Nullable="false" />
+          <Property Name="RecipientID" Type="int" />
+          <Property Name="DonorID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DonationSite">
+          <Key>
+            <PropertyRef Name="DonationSiteID" />
+          </Key>
+          <Property Name="DonationSiteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SiteName" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="EventStartDate" Type="date" />
+          <Property Name="EventEndDate" Type="date" />
+          <Property Name="RegistrationEmail" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegistrationPhone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="StaffingRequired" Type="int" />
+          <Property Name="MobileSite" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Donor">
+          <Key>
+            <PropertyRef Name="DonorID" />
+          </Key>
+          <Property Name="DonorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActiveDonor" Type="bit" Nullable="false" />
+          <Property Name="DonorFirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DonorLastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BloodType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="RhFactor" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="Wight" Type="float" />
+          <Property Name="DonorEmail" Type="nvarchar" MaxLength="100" />
+          <Property Name="DonorPhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="LastScreeningDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Recipient">
+          <Key>
+            <PropertyRef Name="RecipientID" />
+          </Key>
+          <Property Name="RecipientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateOfUse" Type="date" Nullable="false" />
+          <Property Name="RelatedCondition" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="RecipientCodedName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DonationID" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsAdmin" Type="bit" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="bit" Nullable="false" />
+          <Property Name="ActivationCode" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Donation_DonationSite">
+          <End Role="DonationSite" Type="Self.DonationSite" Multiplicity="1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonationSite">
+              <PropertyRef Name="DonationSiteID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="DonationSiteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donation_Donor">
+          <End Role="Donor" Type="Self.Donor" Multiplicity="1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donor">
+              <PropertyRef Name="DonorID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="DonorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donation_Recipient">
+          <End Role="Recipient" Type="Self.Recipient" Multiplicity="0..1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipient">
+              <PropertyRef Name="RecipientID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="RecipientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recipient_Donation">
+          <End Role="Donation" Type="Self.Donation" Multiplicity="0..1" />
+          <End Role="Recipient" Type="Self.Recipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donation">
+              <PropertyRef Name="DonationID" />
+            </Principal>
+            <Dependent Role="Recipient">
+              <PropertyRef Name="DonationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BloodDonorDBModelStoreContainer">
+          <EntitySet Name="Donation" EntityType="Self.Donation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonationSite" EntityType="Self.DonationSite" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Donor" EntityType="Self.Donor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Recipient" EntityType="Self.Recipient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Donation_DonationSite" Association="Self.FK_Donation_DonationSite">
+            <End Role="DonationSite" EntitySet="DonationSite" />
+            <End Role="Donation" EntitySet="Donation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donation_Donor" Association="Self.FK_Donation_Donor">
+            <End Role="Donor" EntitySet="Donor" />
+            <End Role="Donation" EntitySet="Donation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donation_Recipient" Association="Self.FK_Donation_Recipient">
+            <End Role="Recipient" EntitySet="Recipient" />
+            <End Role="Donation" EntitySet="Donation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recipient_Donation" Association="Self.FK_Recipient_Donation">
+            <End Role="Donation" EntitySet="Donation" />
+            <End Role="Recipient" EntitySet="Recipient" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BloodDonorDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Donation">
+          <Key>
+            <PropertyRef Name="DonationID" />
+          </Key>
+          <Property Name="DonationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DonationType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CrossBloodType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CrossRhFactor" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ExpirationDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NumberOfUnits" Type="Double" Nullable="false" />
+          <Property Name="DonationSiteID" Type="Int32" Nullable="false" />
+          <Property Name="RecipientID" Type="Int32" />
+          <Property Name="DonorID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DonationSite" Relationship="Self.FK_Donation_DonationSite" FromRole="Donation" ToRole="DonationSite" />
+          <NavigationProperty Name="Donor" Relationship="Self.FK_Donation_Donor" FromRole="Donation" ToRole="Donor" />
+          <NavigationProperty Name="Recipient" Relationship="Self.FK_Donation_Recipient" FromRole="Donation" ToRole="Recipient" />
+          <NavigationProperty Name="Recipients" Relationship="Self.FK_Recipient_Donation" FromRole="Donation" ToRole="Recipient" />
+        </EntityType>
+        <EntityType Name="DonationSite">
+          <Key>
+            <PropertyRef Name="DonationSiteID" />
+          </Key>
+          <Property Name="DonationSiteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SiteName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EventStartDate" Type="DateTime" Precision="0" />
+          <Property Name="EventEndDate" Type="DateTime" Precision="0" />
+          <Property Name="RegistrationEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationPhone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StaffingRequired" Type="Int32" />
+          <Property Name="MobileSite" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Donations" Relationship="Self.FK_Donation_DonationSite" FromRole="DonationSite" ToRole="Donation" />
+        </EntityType>
+        <EntityType Name="Donor">
+          <Key>
+            <PropertyRef Name="DonorID" />
+          </Key>
+          <Property Name="DonorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActiveDonor" Type="Boolean" Nullable="false" />
+          <Property Name="DonorFirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DonorLastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BloodType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RhFactor" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="Wight" Type="Double" />
+          <Property Name="DonorEmail" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DonorPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LastScreeningDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Donations" Relationship="Self.FK_Donation_Donor" FromRole="Donor" ToRole="Donation" />
+        </EntityType>
+        <EntityType Name="Recipient">
+          <Key>
+            <PropertyRef Name="RecipientID" />
+          </Key>
+          <Property Name="RecipientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateOfUse" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="RelatedCondition" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RecipientCodedName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DonationID" Type="Int32" />
+          <NavigationProperty Name="Donations" Relationship="Self.FK_Donation_Recipient" FromRole="Recipient" ToRole="Donation" />
+          <NavigationProperty Name="Donation" Relationship="Self.FK_Recipient_Donation" FromRole="Recipient" ToRole="Donation" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+          <Property Name="IsEmailVerified" Type="Boolean" Nullable="false" />
+          <Property Name="ActivationCode" Type="Guid" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Donation_DonationSite">
+          <End Role="DonationSite" Type="Self.DonationSite" Multiplicity="1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonationSite">
+              <PropertyRef Name="DonationSiteID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="DonationSiteID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donation_Donor">
+          <End Role="Donor" Type="Self.Donor" Multiplicity="1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donor">
+              <PropertyRef Name="DonorID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="DonorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Donation_Recipient">
+          <End Role="Recipient" Type="Self.Recipient" Multiplicity="0..1" />
+          <End Role="Donation" Type="Self.Donation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Recipient">
+              <PropertyRef Name="RecipientID" />
+            </Principal>
+            <Dependent Role="Donation">
+              <PropertyRef Name="RecipientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Recipient_Donation">
+          <End Role="Donation" Type="Self.Donation" Multiplicity="0..1" />
+          <End Role="Recipient" Type="Self.Recipient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Donation">
+              <PropertyRef Name="DonationID" />
+            </Principal>
+            <Dependent Role="Recipient">
+              <PropertyRef Name="DonationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BloodDonorDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Donations" EntityType="Self.Donation" />
+          <EntitySet Name="DonationSites" EntityType="Self.DonationSite" />
+          <EntitySet Name="Donors" EntityType="Self.Donor" />
+          <EntitySet Name="Recipients" EntityType="Self.Recipient" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Donation_DonationSite" Association="Self.FK_Donation_DonationSite">
+            <End Role="DonationSite" EntitySet="DonationSites" />
+            <End Role="Donation" EntitySet="Donations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donation_Donor" Association="Self.FK_Donation_Donor">
+            <End Role="Donor" EntitySet="Donors" />
+            <End Role="Donation" EntitySet="Donations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Donation_Recipient" Association="Self.FK_Donation_Recipient">
+            <End Role="Recipient" EntitySet="Recipients" />
+            <End Role="Donation" EntitySet="Donations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Recipient_Donation" Association="Self.FK_Recipient_Donation">
+            <End Role="Donation" EntitySet="Donations" />
+            <End Role="Recipient" EntitySet="Recipients" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BloodDonorDBModelStoreContainer" CdmEntityContainer="BloodDonorDBEntities">
+          <EntitySetMapping Name="Donations">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.Donation">
+              <MappingFragment StoreEntitySet="Donation">
+                <ScalarProperty Name="DonationID" ColumnName="DonationID" />
+                <ScalarProperty Name="DonationType" ColumnName="DonationType" />
+                <ScalarProperty Name="CrossBloodType" ColumnName="CrossBloodType" />
+                <ScalarProperty Name="CrossRhFactor" ColumnName="CrossRhFactor" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+                <ScalarProperty Name="DonationSiteID" ColumnName="DonationSiteID" />
+                <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
+                <ScalarProperty Name="DonorID" ColumnName="DonorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonationSites">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.DonationSite">
+              <MappingFragment StoreEntitySet="DonationSite">
+                <ScalarProperty Name="DonationSiteID" ColumnName="DonationSiteID" />
+                <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+                <ScalarProperty Name="EventStartDate" ColumnName="EventStartDate" />
+                <ScalarProperty Name="EventEndDate" ColumnName="EventEndDate" />
+                <ScalarProperty Name="RegistrationEmail" ColumnName="RegistrationEmail" />
+                <ScalarProperty Name="RegistrationPhone" ColumnName="RegistrationPhone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="StaffingRequired" ColumnName="StaffingRequired" />
+                <ScalarProperty Name="MobileSite" ColumnName="MobileSite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Donors">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.Donor">
+              <MappingFragment StoreEntitySet="Donor">
+                <ScalarProperty Name="DonorID" ColumnName="DonorID" />
+                <ScalarProperty Name="ActiveDonor" ColumnName="ActiveDonor" />
+                <ScalarProperty Name="DonorFirstName" ColumnName="DonorFirstName" />
+                <ScalarProperty Name="DonorLastName" ColumnName="DonorLastName" />
+                <ScalarProperty Name="BloodType" ColumnName="BloodType" />
+                <ScalarProperty Name="RhFactor" ColumnName="RhFactor" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Wight" ColumnName="Wight" />
+                <ScalarProperty Name="DonorEmail" ColumnName="DonorEmail" />
+                <ScalarProperty Name="DonorPhoneNumber" ColumnName="DonorPhoneNumber" />
+                <ScalarProperty Name="LastScreeningDate" ColumnName="LastScreeningDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Recipients">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.Recipient">
+              <MappingFragment StoreEntitySet="Recipient">
+                <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
+                <ScalarProperty Name="DateOfUse" ColumnName="DateOfUse" />
+                <ScalarProperty Name="RelatedCondition" ColumnName="RelatedCondition" />
+                <ScalarProperty Name="RecipientCodedName" ColumnName="RecipientCodedName" />
+                <ScalarProperty Name="DonationID" ColumnName="DonationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BloodDonorDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="IsEmailVerified" ColumnName="IsEmailVerified" />
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

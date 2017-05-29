@@ -1,0 +1,70 @@
+﻿@model FrontEndComplete.Models.UserLogin
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href="~/Content/log-in.css" rel="stylesheet" />
+<div class="main">
+
+
+    <div class="container">
+        <center>
+            <div class="middle">
+                <div id="login">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <form action="javascript:void(0);" method="get">
+                        <fieldset class="clearfix">
+                            <p><span class="fa fa-user"></span>
+                            @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", placeholder="Email address" } )
+                            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                                </p> <!-- JS because of IE support; better: placeholder="Username" -->
+                            <p><span class="fa fa-lock"></span>
+                           @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder="Password", @type="Password" })
+                           @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                </p> <!-- JS because of IE support; better: placeholder="Password" -->
+                            
+                       <!-- See how I can display this
+                           <div class="checkbox-success">
+                                <label>Remember me
+                                    @Html.CheckBoxFor(model => model.RememberMe)
+                                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                                </label>
+                            </div>
+                       -->    
+                            
+
+                            <div>
+                                <span style="width:48%; text-align:left;  display: inline-block;">
+                                    <a class="small-text" href="#">
+                                        @Html.ActionLink("Forgot password?", "Registration","Home")
+                                    </a>
+                                </span>
+                                <span style="width:50%; text-align:right;  display: inline-block;"><input type="submit" value="Sign In"></span>
+                            </div>
+                        </fieldset>
+                        <div class="clearfix"></div>
+                    </form>
+                }
+                    
+                    <div class="clearfix"></div>
+                </div> <!-- end login -->
+                <div class="logo">
+                    LOGO
+
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </center>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

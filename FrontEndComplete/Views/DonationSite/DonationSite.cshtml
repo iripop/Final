@@ -1,0 +1,82 @@
+﻿@model List<FrontEndComplete.Models.DonationSite>
+
+@{
+    ViewBag.Title = "DonationSite";
+    var grid = new WebGrid(canPage: true, rowsPerPage: 10);
+    grid.Bind(source: Model, rowCount: ViewBag.TotalRows, autoSortAndPage: false);
+}
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="container">
+        <h2>DonationSite</h2>
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand">Search</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    @using (Html.BeginForm("DonationSite", "DonationSite", FormMethod.Get, new { @class = "navrbar-form navbar-left" }))
+                    {
+                        <div class="form-group">
+                            <input type="text" name="search" value="@ViewBag.search" class="form-control" placeholder="search" />
+                        </div>
+                        <button type="submit" value="Search" class="btn btn-success">Search</button>
+                    }
+                </div>
+            </div>
+        </nav>
+        <div>
+            @grid.Table(
+       tableStyle: "table table-responsive table-bordered",
+       columns: grid.Columns(
+           grid.Column(columnName: "SiteName", header: "Donation Site"),
+           grid.Column(columnName: "EventStartDate", header: "End date"),
+           grid.Column(columnName: "EventEndDate", header: "Start date"),
+           grid.Column(columnName: "RegistrationEmail", header: "Site Email"),
+           grid.Column(columnName: "RegistrationPhone", header: "Site phone number"),
+           grid.Column(columnName: "Address", header: "Address"),
+           grid.Column(columnName: "City", header: "City"),
+           grid.Column(columnName: "Zip", header: "Zip Code"),
+           grid.Column(columnName: "StaffingRequired", header: "Number of staff required"),
+           grid.Column(columnName: "MobileSite", header: "Is mobile site")
+
+           )
+        )
+            <div class="row">
+                <div class="col-sm-6">
+                    @grid.PagerList(mode: WebGridPagerModes.All, paginationStyle: "pagination pagination-small pagination-right")
+                </div>
+            </div>
+            @Html.Hidden("dir", grid.SortDirection)
+            @Html.Hidden("col", grid.SortColumn)
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            try {
+                var dir = $('#dir').val();
+                var col = $('#col').val();
+                var header = $("th a[href*=" + col + "]");
+                if (dir == "Ascending") {
+                    header.text(header.text() + "A");
+                }
+                if (dir == "Descending") {
+                    header.text(header.text() + "D");
+                }
+            } catch (e){
+        }
+    })
+    </script>
+}
+
