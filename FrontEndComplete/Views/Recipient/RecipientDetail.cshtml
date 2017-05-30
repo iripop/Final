@@ -1,0 +1,31 @@
+﻿@model FrontEndComplete.Models.RecipientModel
+
+@{
+    ViewBag.Title = "RecipientDetail";
+}
+
+<div class="container">
+    <h2>RecipientDetail</h2>
+    <table class="table table-striped" style="width:40%">
+        <tr>
+            <td>Recipient Coded Name</td>
+            <td>@Model.RecipientCodedName</td>
+        </tr>
+        <tr>
+            <td>Date of Use</td>
+            <td>@Model.DateOfUse</td>
+        </tr>
+        <tr>
+            <td>Related Condition</td>
+            <td>@Model.RelatedCondition</td>
+        </tr>
+        <tr>
+            <td>Donation Type</td>
+            <td>@Model.DonationType</td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<FrontEndComplete.Models.DonationModel>
+
+@{
+    ViewBag.Title = "Donation";
+}
+
+<h2>Donation</h2>
+<div class="container" style="width:80%; margin-top:12%">
+
+    @Html.ActionLink("Add a donation", "SelectDonorRecipientDonationSite", "Donation", new { @class="btn btn - block btn - primary" })
+
+
+    @if (Model != null)
+    {
+
+        <table class="table table-striped">
+
+            <tr>
+                <th>Id</th>
+                <th>Donation type</th>
+                <th>Blood type</th>
+                <th>Rh factor</th>
+                <th>Expiration date</th>
+                <th>Number of units</th>
+                <th>Donation site name</th>
+                <th>Donor</th>
+                <th>Recipient</th>
+                <th>Edit</th>
+            </tr>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.DonationID</td>
+                        <td>@Html.ActionLink(item.DonationType, "DonationDetail", new { donationID = item.DonationID })</td>
+                        <td>@item.CrossBloodType</td>
+                        <td>@item.CrossRhFactor</td>
+                        <td>@item.ExpirationDate</td>
+                        <td>@item.NumberOfUnits</td>
+                        <td>@item.SiteName</td>
+                        <td>@item.DonorFirstName</td>
+                        <td>@item.RecipientCodedName</td>
+                        <td>Edit</td>
+                    </tr>
+                }
+                <tr></tr>
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

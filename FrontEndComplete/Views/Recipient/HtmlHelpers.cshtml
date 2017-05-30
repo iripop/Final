@@ -1,0 +1,21 @@
+﻿@model FrontEndComplete.Models.RecipientModel
+
+@{
+    ViewBag.Title = "HtmlHelpers";
+}
+
+<div class="container" style="width:80%; margin-top:12%">
+    <h2>Donations list</h2>
+    @Html.DropDownListFor(model=>model.DonationID, ViewBag.DonationsList as SelectList, "--select--", new { @class="form-control"})
+    @Html.TextBoxFor(model=>model.RecipientCodedName, new  {@class="form-control" , @placeholder="Recipient coded name"})
+    @Html.TextBoxFor(model => model.RelatedCondition, new { @class = "form-control", @placeholder="Related condition" })
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m=>m.Remember)
+            Check out this
+        </label>
+    </div>
+    <input type="submit" value="Submit"  class="btn btn-block btn-primary"/>
+</div>
+
+

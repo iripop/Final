@@ -152,8 +152,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\DonationController.cs" />
     <Compile Include="Controllers\DonationSiteController.cs" />
+    <Compile Include="Controllers\DonorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecipientController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Global.asax.cs">
@@ -177,16 +180,20 @@
     <Compile Include="Models\Donation.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DonationModel.cs" />
     <Compile Include="Models\DonationSite.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DonationSiteModel.cs" />
     <Compile Include="Models\Donor.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DonorModel.cs" />
     <Compile Include="Models\Extended\User.cs" />
     <Compile Include="Models\Recipient.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RecipientModel.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>DBModel.tt</DependentUpon>
     </Compile>
@@ -202,6 +209,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\giphy-downsized.gif" />
     <Content Include="Content\layout.css" />
     <Content Include="Content\log-in.css" />
     <Content Include="Content\themes\base\accordion.css" />
@@ -312,9 +320,17 @@
     <Content Include="Views\Home\VerifyAccount.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\DonationSite\DonationSite.cshtml" />
+    <Content Include="Views\Recipient\Recipient.cshtml" />
+    <Content Include="Views\Recipient\RecipientDetail.cshtml" />
+    <Content Include="Views\Recipient\Index.cshtml" />
+    <Content Include="Views\Recipient\HtmlHelpers.cshtml" />
+    <Content Include="Views\Donation\SelectDonorRecipientDonationSite.cshtml" />
+    <Content Include="Views\Donation\Donation.cshtml" />
+    <Content Include="Views\Donation\DonationDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Donor\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

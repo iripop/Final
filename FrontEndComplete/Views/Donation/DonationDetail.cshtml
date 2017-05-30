@@ -1,0 +1,43 @@
+﻿@model FrontEndComplete.Models.DonationModel
+
+@{
+    ViewBag.Title = "DonationDetail";
+}
+
+<div class="container">
+    <h2>DonationDetail</h2>
+    <table class="table table-striped" style="width:40%">
+        <tr>
+            <td>Recipient Coded Name</td>
+            <td>@Model.DonationID</td>
+        </tr>
+        <tr>
+            <td>Date of Use</td>
+            <td>@Model.DonationType</td>
+        </tr>
+        <tr>
+            <td>Related Condition</td>
+            <td>@Model.CrossBloodType</td>
+        </tr>
+        <tr>
+            <td>Donation Type</td>
+            <td>@Model.CrossRhFactor</td>
+        </tr>
+        <tr>
+            <td>Donation Type</td>
+            <td>@Model.DonorFirstName</td>
+        </tr>
+        <tr>
+            <td>Donation Type</td>
+            <td>@Model.SiteName</td>
+        </tr>
+        <tr>
+            <td>Donation Type</td>
+            <td>@Model.RecipientCodedName</td>
+        </tr>
+    </table>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

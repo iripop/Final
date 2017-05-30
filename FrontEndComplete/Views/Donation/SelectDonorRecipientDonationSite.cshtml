@@ -1,0 +1,125 @@
+﻿@model FrontEndComplete.Models.DonationModel
+
+@{
+    ViewBag.Title = "SelectDonorRecipientDonationSite";
+}
+<style>
+    .error{
+        color:red;
+    }
+</style>
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+
+<div class="container" style="width:80%; margin-top:12%">
+  
+    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#myModal">Open Modal</a>
+
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 class="modal-title">New Donation</h3>
+                    
+                </div>
+
+                <div class="modal-body">
+                    
+                    <form id="donationsForm">
+                        
+                        <p>@Html.DropDownListFor(model => model.DonorID, ViewBag.DonorsList as SelectList, "--Select a donor--", new { @class = "form-control" }) </p>
+                           
+                        <p>@Html.TextBoxFor(model => model.DonationType, new { @class = "form-control", @placeholder = "Donation Type" }) </p>
+
+                        <p>@Html.TextBoxFor(model => model.CrossBloodType, new { @class = "form-control", @placeholder = "Blood Type" }) </p>
+
+                        <p>@Html.TextBoxFor(model => model.CrossRhFactor, new { @class = "form-control", @placeholder = "Rh factor" }) </p>
+
+                        <p>@Html.TextBoxFor(model => model.ExpirationDate, new { @class = "form-control", @type = "date", @placeholder = "Expiration date" }) </p>
+
+                        <p>@Html.TextBoxFor(model => model.NumberOfUnits, new { @class = "form-control", @placeholder = "Number of Units" }) </p>
+
+                        <p>@Html.DropDownListFor(model => model.DonationSiteID, ViewBag.DonationSiteList as SelectList, "--Select a donation site--", new { @class = "form-control" }) </p>
+
+                        <p>@Html.DropDownListFor(model => model.RecipientID, ViewBag.RecipientsList as SelectList, "--Select recipient--", new { @class = "form-control" }) </p>
+
+                        
+                    </form>
+                    <div style="text-align:center; display:none" id="loader">
+                        <img src="~/Content/giphy-downsized.gif" width="150" />
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                    <input type="reset" value="Submit" class="btn btn-success" id="btnSubmit" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+        $(document).ready(function () {
+
+            $("#btnSubmit").click(function () {
+
+                $("#loader").show();
+                var data = $("#donationsForm").serialize();
+
+                $.ajax({
+
+                    type: "POST",
+                    url: "/Donation/SaveDonationRecord",
+                    data: data,
+                    success: function (response) {
+                        
+                        $("#loader").hide();
+                        alert("Donation was added");
+                    }
+                })
+            })
+        })
+</script>
+    
+<script>
+
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function () {
+
+            $("#loader").show();
+
+            var myformdata = $("#donationsForm").serialize();
+
+            $.ajax({
+
+                type: "POST",
+                url:"/Donation/SaveDonationRecord",
+                data: myformdata,
+                success: function (response) {
+                    $("#loader").hide();
+                    $("#myModal").modal("hide");
+                }
+            })
+
+        })
+    })
+    </script>
+}
+
+
+<!--This are for clinet side validation-->
+<!--Ajax:asynschronous javascript and xml, get and post the data to server-->
