@@ -12,9 +12,10 @@ namespace FrontEndComplete.Models
         public string RelatedCondition { get; set; }
         public string RecipientCodedName { get; set; }
         public Nullable<int> DonationID { get; set; }
+        public bool RecipientIsDeleted { get; set; }
 
         //Custom attributes
         public string DonationType { get; set; }
-        public bool Remember { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

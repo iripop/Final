@@ -25,6 +25,7 @@ namespace FrontEndComplete.Models
         public string RelatedCondition { get; set; }
         public string RecipientCodedName { get; set; }
         public Nullable<int> DonationID { get; set; }
+        public Nullable<bool> RecipientIsDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Donation> Donations { get; set; }

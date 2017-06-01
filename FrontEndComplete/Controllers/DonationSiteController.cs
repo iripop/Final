@@ -50,5 +50,37 @@ namespace FrontEndComplete.Controllers
                 return v.ToList();
             }
         }
+
+        public ActionResult SaveDonationSiteRecord(DonationSiteModel model)
+        {
+            try
+            {
+                BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+                DonationSite don = new DonationSite();
+
+                don.SiteName = model.SiteName;
+                don.EventStartDate = model.EventStartDate;
+                don.EventEndDate = model.EventEndDate;
+                don.RegistrationEmail = model.RegistrationEmail;
+                don.RegistrationPhone = model.RegistrationPhone;
+                don.Address = model.Address;
+                don.City = model.City;
+                don.Zip = model.Zip;
+                don.StaffingRequired = model.StaffingRequired;
+                don.MobileSite = model.MobileSite;
+
+                db.DonationSites.Add(don);
+                db.SaveChanges();
+
+                int latestDonId = don.DonationSiteID;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return RedirectToAction("DonationSite");
+        }
     }
 }

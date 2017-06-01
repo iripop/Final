@@ -12,8 +12,11 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="container">
+    <div class="container" style="width:80%; margin-top:12%">
         <h2>DonationSite</h2>
+
+        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-plus"></i>Add a donation site</a>
+
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -55,6 +58,8 @@
             @Html.Hidden("dir", grid.SortDirection)
             @Html.Hidden("col", grid.SortColumn)
         </div>
+
+
     </div>
 }
 

@@ -33,6 +33,8 @@ namespace FrontEndComplete.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Please select a donor")]
         public int DonorID { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         //Custom attributes
         public string DonorFirstName { get; set; }
         public string RecipientCodedName { get; set; }

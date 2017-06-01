@@ -9,60 +9,131 @@ namespace FrontEndComplete.Controllers
 {
     public class RecipientController : Controller
     {
-        
-        public ActionResult Recipient()
+
+        public ActionResult Recipients()
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
-            List<Recipient> recipientList = db.Recipients.ToList();
 
-            RecipientModel recipientM = new RecipientModel();
-            List<RecipientModel> recipientMList = recipientList.Select(x => new RecipientModel
-            { RecipientCodedName = x.RecipientCodedName,
-                RecipientID = x.RecipientID,
-                RelatedCondition = x.RelatedCondition,
+            List<Donation> list = db.Donations.ToList();
+
+            ViewBag.DonationList = new SelectList(list.Where(x => x.IsDeleted == false), "DonationID", "DonationType");
+
+            List<RecipientModel> listRec = db.Recipients.Where(x => x.RecipientIsDeleted == false).Select(x => new RecipientModel {
+                RecipientCodedName = x.RecipientCodedName,
+                DonationType = x.Donation.DonationType,
                 DateOfUse = x.DateOfUse,
-                DonationID = x.DonationID,
-                DonationType = x.Donation.DonationType }).ToList();
+                RelatedCondition = x.RelatedCondition,
+                RecipientID = x.RecipientID }).ToList();
 
-            return View(recipientMList);
+            ViewBag.RecipientList = listRec;
+
+            return View();
+
         }
 
-        public ActionResult Index()
+        [HttpPost]
+        public ActionResult Recipients(RecipientModel model)
+        {
+            try
+            {
+                BloodDonorDBEntities db = new BloodDonorDBEntities();
+                List<Donation> list = db.Donations.ToList();
+                ViewBag.DonationList = new SelectList(list.Where(x => x.IsDeleted == false), "DonationID", "DonationType");
+
+                if (model.RecipientID > 0)
+                {
+                    //Update a recipient
+                    Recipient rec = db.Recipients.SingleOrDefault(x => x.RecipientID == model.RecipientID && x.RecipientIsDeleted == false);
+                   
+                    rec.DonationID = model.DonationID;
+                    rec.RecipientCodedName = model.RecipientCodedName;
+                    rec.DateOfUse = model.DateOfUse;
+                    rec.RelatedCondition = model.RelatedCondition;
+
+                    db.SaveChanges();
+                }
+                else
+                {
+                    //Insert a recipient in database
+                    Recipient rec = new Recipient();
+                    rec.DateOfUse = model.DateOfUse;
+                    rec.RelatedCondition = model.RelatedCondition;
+                    rec.RecipientCodedName = model.RecipientCodedName;
+                    rec.DonationID = model.DonationID;
+                    rec.RecipientIsDeleted = false;
+
+                    db.Recipients.Add(rec);
+                    db.SaveChanges();
+
+                    int latestRecipientID = rec.RecipientID;
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+        }
+
+        public JsonResult DeleteRecipient(int recipientID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
-            List<Recipient> recipientList = db.Recipients.ToList();
-            RecipientModel recipientM = new RecipientModel();
-            List<RecipientModel> recipientMList = recipientList.Select(x => new RecipientModel
+
+            bool result = false;
+            Recipient rec = db.Recipients.SingleOrDefault(x => x.RecipientIsDeleted == false && x.RecipientID == recipientID);
+
+            if (rec != null)
             {
-                RecipientID = x.RecipientID,
+                rec.RecipientIsDeleted = true;
+                db.SaveChanges();
+                result = true;
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult ShowRecipientDetail(int RecipientID)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            List<RecipientModel> listRec = db.Recipients.Where(x => x.RecipientIsDeleted == false && x.RecipientID==RecipientID).Select(x => new RecipientModel
+            {
                 RecipientCodedName = x.RecipientCodedName,
-                DonationID = x.DonationID,
+                DonationType = x.Donation.DonationType,
+                DateOfUse = x.DateOfUse,
+                RelatedCondition = x.RelatedCondition,
+                RecipientID = x.RecipientID
             }).ToList();
 
-            return View(recipientMList);
+            ViewBag.RecipientList = listRec;
+
+            return PartialView("ShowRecipientDetail");
+
         }
 
-        public ActionResult RecipientDetail(int recipientID)
-        {
-            BloodDonorDBEntities db = new BloodDonorDBEntities();
-
-            Recipient recipient = db.Recipients.SingleOrDefault(x => x.RecipientID == recipientID);
-
-            RecipientModel recipientM = new RecipientModel();
-
-            recipientM.RecipientCodedName = recipient.RecipientCodedName;
-            recipientM.RelatedCondition = recipient.RelatedCondition;
-            recipientM.DateOfUse = recipient.DateOfUse;
-            recipientM.DonationType = recipient.Donation.DonationType;
-            return View(recipientM);
-        }
-
-        public ActionResult HtmlHelpers()
+        public ActionResult AddEditRecipient(int RecipientID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
             List<Donation> list = db.Donations.ToList();
-            ViewBag.DonationsList = new SelectList(list, "DonationID", "DonationType");
-            return View();
+            ViewBag.DonationList = new SelectList(list.Where(x=>x.IsDeleted==false), "DonationID", "DonationType");
+
+            RecipientModel model = new RecipientModel();
+
+            if (RecipientID > 0)
+            {
+                Recipient rec = db.Recipients.SingleOrDefault(x => x.RecipientID == RecipientID && x.RecipientIsDeleted == false);
+                model.RecipientID = rec.RecipientID;
+                model.DonationID = rec.DonationID;
+                model.RecipientCodedName = rec.RecipientCodedName;
+                model.DateOfUse = rec.DateOfUse;
+                model.RelatedCondition = rec.RelatedCondition;
+
+            }
+
+            return PartialView("AddEditRecipient", model);
+
         }
 
     }

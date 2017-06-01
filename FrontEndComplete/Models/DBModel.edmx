@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="BloodDonorDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BloodDonorDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Donation">
           <Key>
             <PropertyRef Name="DonationID" />
@@ -18,6 +18,7 @@
           <Property Name="DonationSiteID" Type="int" Nullable="false" />
           <Property Name="RecipientID" Type="int" />
           <Property Name="DonorID" Type="int" Nullable="false" />
+          <Property Name="IsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="DonationSite">
           <Key>
@@ -60,6 +61,7 @@
           <Property Name="RelatedCondition" Type="nvarchar" MaxLength="250" Nullable="false" />
           <Property Name="RecipientCodedName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DonationID" Type="int" />
+          <Property Name="RecipientIsDeleted" Type="bit" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -157,8 +159,7 @@
             <End Role="Recipient" EntitySet="Recipient" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="BloodDonorDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -179,6 +180,7 @@
           <NavigationProperty Name="Donor" Relationship="Self.FK_Donation_Donor" FromRole="Donation" ToRole="Donor" />
           <NavigationProperty Name="Recipient" Relationship="Self.FK_Donation_Recipient" FromRole="Donation" ToRole="Recipient" />
           <NavigationProperty Name="Recipients" Relationship="Self.FK_Recipient_Donation" FromRole="Donation" ToRole="Recipient" />
+          <Property Name="IsDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="DonationSite">
           <Key>
@@ -225,6 +227,7 @@
           <Property Name="DonationID" Type="Int32" />
           <NavigationProperty Name="Donations" Relationship="Self.FK_Donation_Recipient" FromRole="Recipient" ToRole="Donation" />
           <NavigationProperty Name="Donation" Relationship="Self.FK_Recipient_Donation" FromRole="Recipient" ToRole="Donation" />
+          <Property Name="RecipientIsDeleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -331,6 +334,7 @@
           <EntitySetMapping Name="Donations">
             <EntityTypeMapping TypeName="BloodDonorDBModel.Donation">
               <MappingFragment StoreEntitySet="Donation">
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
                 <ScalarProperty Name="DonationID" ColumnName="DonationID" />
                 <ScalarProperty Name="DonationType" ColumnName="DonationType" />
                 <ScalarProperty Name="CrossBloodType" ColumnName="CrossBloodType" />
@@ -380,6 +384,7 @@
           <EntitySetMapping Name="Recipients">
             <EntityTypeMapping TypeName="BloodDonorDBModel.Recipient">
               <MappingFragment StoreEntitySet="Recipient">
+                <ScalarProperty Name="RecipientIsDeleted" ColumnName="RecipientIsDeleted" />
                 <ScalarProperty Name="RecipientID" ColumnName="RecipientID" />
                 <ScalarProperty Name="DateOfUse" ColumnName="DateOfUse" />
                 <ScalarProperty Name="RelatedCondition" ColumnName="RelatedCondition" />

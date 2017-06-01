@@ -29,6 +29,7 @@ namespace FrontEndComplete.Models
         public int DonationSiteID { get; set; }
         public Nullable<int> RecipientID { get; set; }
         public int DonorID { get; set; }
+        public Nullable<bool> IsDeleted { get; set; }
     
         public virtual DonationSite DonationSite { get; set; }
         public virtual Donor Donor { get; set; }
