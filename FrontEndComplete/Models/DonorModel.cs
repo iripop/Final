@@ -8,7 +8,7 @@ namespace FrontEndComplete.Models
     public class DonorModel
     {
         public int DonorID { get; set; }
-        public bool ActiveDonor { get; set; }
+        public string ActiveDonor { get; set; }
         public string DonorFirstName { get; set; }
         public string DonorLastName { get; set; }
         public string BloodType { get; set; }
@@ -18,5 +18,6 @@ namespace FrontEndComplete.Models
         public string DonorEmail { get; set; }
         public string DonorPhoneNumber { get; set; }
         public Nullable<System.DateTime> LastScreeningDate { get; set; }
+        public Nullable<bool> DonorIsDeleted { get; set; }
     }
 }

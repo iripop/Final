@@ -28,7 +28,9 @@ namespace FrontEndComplete.Models
         public virtual DbSet<Donation> Donations { get; set; }
         public virtual DbSet<DonationSite> DonationSites { get; set; }
         public virtual DbSet<Donor> Donors { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
         public virtual DbSet<Recipient> Recipients { get; set; }
+        public virtual DbSet<RoleTable> RoleTables { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }

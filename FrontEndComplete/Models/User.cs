@@ -23,5 +23,9 @@ namespace FrontEndComplete.Models
         public bool IsAdmin { get; set; }
         public bool IsEmailVerified { get; set; }
         public System.Guid ActivationCode { get; set; }
+        public Nullable<bool> UserIsDeleted { get; set; }
+        public Nullable<int> ImageID { get; set; }
+    
+        public virtual Image Image { get; set; }
     }
 }

@@ -1,0 +1,18 @@
+﻿@model  IEnumerable<FrontEndComplete.Models.RecipientModel>
+
+@if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+        <tr id="row_@item.RecipientID">
+            <td>@item.RecipientID</td>
+            <td>@item.DonationType</td>
+            <td>@item.RecipientCodedName</td>
+            <td>@item.DateOfUse</td>
+            <td>@item.RelatedCondition</td>
+            <td><a href="#" class="btn btn-danger" onclick="ConfirmDelete(@item.RecipientID)"><i class="glyphicon glyphicon-trash"></i></a> </td>
+            <td><a href="#" class="btn btn-success" onclick="ShowRecipient(@item.RecipientID)"><i class="glyphicon glyphicon-eye-open"></i></a> </td>
+            <td><a href="#" class="btn btn-success" onclick="AddEditRecipient(@item.RecipientID)"><i class="glyphicon glyphicon-pencil"></i></a> </td>
+        </tr>
+    }
+}

@@ -2,9 +2,8 @@
 
 <div>
 
-    <form id="donationsForm">
-
-        @Html.HiddenFor(model => model.DonationID);
+    <form id="myDonationForm">
+        @Html.HiddenFor(m => m.DonationID);
 
         <p>@Html.DropDownListFor(model => model.DonorID, ViewBag.DonorsList as SelectList, "--Select a donor--", new { @class = "form-control" }) </p>
 
@@ -14,7 +13,7 @@
 
         <p>@Html.TextBoxFor(model => model.CrossRhFactor, new { @class = "form-control", @placeholder = "Rh factor" }) </p>
 
-        <p>@Html.TextBoxFor(model => model.ExpirationDate, new { @class = "form-control", @type = "date", @placeholder = "Expiration date" }) </p>
+     @* <p>@Html.TextBoxFor(model => model.ExpirationDate, new { @class = "form-control", @type = "date", @placeholder = "Expiration date" }) </p>  *@
 
         <p>@Html.TextBoxFor(model => model.NumberOfUnits, new { @class = "form-control", @placeholder = "Number of Units" }) </p>
 
@@ -22,13 +21,15 @@
 
         <p>@Html.DropDownListFor(model => model.RecipientID, ViewBag.RecipientsList as SelectList, "--Select recipient--", new { @class = "form-control" }) </p>
 
-        <a href="#" id="btnSubmit" class="btn btn-success btn-block">@if (Model.DonationID > 0)
-             { <span>Update</span>}
-             else
-             { <span>Save</span>} 
+        <a href="#" id="btnSubmit" class="btn btn-success btn-block">
+            @if (Model.DonationID > 0)
+            { <span>Update</span>}
+            else
+            { <span>Save</span>}
         </a>
-    </form>
 
+
+    </form>
 
     <div style="text-align:center; display:none" id="loader">
         <img src="~/Content/giphy-downsized.gif" width="150" />
@@ -41,26 +42,24 @@
     $(document).ready(function () {
 
         $("#btnSubmit").click(function () {
-          
+
             $("#loader").show();
 
-            var myformdata = $("#donationsForm").serialize();
+            var data = $("#myDonationForm").serialize();
 
             $.ajax({
 
-                type: "POST",
-                url: "/Donation/SaveDonationRecord",
-                data: myformdata,
-                success: function () {
+                    type: "POST",
+                    url: "/Donation/Donation",
+                data: data,
+                success: function (response) {
                     $("#loader").hide();
                     $("#myAddEditModal").modal("hide");
-                    window.location.href = "/Donation/SaveDonationRecord";
-                }
-            })
+                    window.location.href = "/Donation/Donation";
+                    }
 
-        })
-
-    })
+                });
+            });
+        });
 
 </script>
-

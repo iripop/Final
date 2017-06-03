@@ -4,17 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c7c136e7507400e85124d90236f1fbc" Name="Diagram1">
+      <Diagram DiagramId="e9e356ab2d204af0a33ed92a8f75fd0a" Name="Diagram1">
         <EntityTypeShape EntityType="BloodDonorDBModel.Donation" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="BloodDonorDBModel.DonationSite" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="BloodDonorDBModel.Donor" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="BloodDonorDBModel.Recipient" Width="1.5" PointX="5.25" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="BloodDonorDBModel.sysdiagram" Width="1.5" PointX="2.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BloodDonorDBModel.User" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.DonationSite" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.Donor" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.Image" Width="1.5" PointX="2.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.Recipient" Width="1.5" PointX="5.25" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.RoleTable" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.sysdiagram" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BloodDonorDBModel.User" Width="1.5" PointX="5" PointY="6" IsExpanded="true" />
         <AssociationConnector Association="BloodDonorDBModel.FK_Donation_DonationSite" ManuallyRouted="false" />
         <AssociationConnector Association="BloodDonorDBModel.FK_Donation_Donor" ManuallyRouted="false" />
         <AssociationConnector Association="BloodDonorDBModel.FK_Donation_Recipient" ManuallyRouted="false" />
         <AssociationConnector Association="BloodDonorDBModel.FK_Recipient_Donation" ManuallyRouted="false" />
+        <AssociationConnector Association="BloodDonorDBModel.FK_User_Images" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

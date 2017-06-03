@@ -35,6 +35,8 @@ namespace FrontEndComplete.Models
 
         public bool IsDeleted { get; set; }
 
+        public Nullable<System.DateTime> CreationDate { get; set; }
+
         //Custom attributes
         public string DonorFirstName { get; set; }
         public string RecipientCodedName { get; set; }

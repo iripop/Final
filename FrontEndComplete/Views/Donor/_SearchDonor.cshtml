@@ -1,0 +1,26 @@
+﻿@model IEnumerable<FrontEndComplete.Models.DonorModel>
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        <tr id="row_@item.DonorID">
+            <td>@item.DonorID</td>
+            <td>@item.ActiveDonor</td>
+            <td>@item.DonorFirstName</td>
+            <td>@item.DonorLastName</td>
+            <td>@item.BloodType</td>
+            <td>@item.RhFactor</td>
+            <td>@item.DateOfBirth</td>
+            <td>@item.Wight</td>
+            <td>@item.DonorEmail</td>
+            <td>@item.DonorPhoneNumber</td>
+            <td>@item.LastScreeningDate</td>
+            <td><a href="#" class="btn btn-danger" onclick="ConfirmDelete(@item.DonorID)"><i class="glyphicon glyphicon-trash"></i></a> </td>
+            <td><a href="#" class="btn btn-success" onclick="ShowDonor(@item.DonorID)"><i class="glyphicon glyphicon-eye-open"></i></a> </td>
+            <td><a href="#" class="btn btn-success" onclick="AddEditDonor(@item.DonorID)"><i class="glyphicon glyphicon-pencil"></i></a> </td>
+        </tr>
+    }
+}
+
+

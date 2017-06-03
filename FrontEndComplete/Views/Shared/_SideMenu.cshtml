@@ -1,0 +1,13 @@
+﻿@model IEnumerable<FrontEndComplete.Models.MenuItem>
+
+<ul class="list-group">
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <li class="list-group-item"><a href="@item.Link" class="btn btn-default btn-block">@item.LinkName</a></li>
+        }
+    }
+
+</ul>

@@ -9,11 +9,11 @@ namespace FrontEndComplete.Controllers
 {
     public class DonationController : Controller
     {
-        public ActionResult SelectDonorRecipientDonationSite()
+        public ActionResult Donation()
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
             List<Donor> listDonor = db.Donors.ToList();
-            ViewBag.DonorsList = new SelectList(listDonor, "DonorID", "DonorFirstName");
+            ViewBag.DonorsList = new SelectList(listDonor.Where(x=>x.ActiveDonor=="Yes" && x.DonorIsDeleted==false), "DonorID", "DonorFirstName");
             List<Recipient> listRecipient = db.Recipients.ToList();
             ViewBag.RecipientsList = new SelectList(listRecipient, "RecipientID", "RecipientCodedName");
             List<DonationSite> listDonationSite = db.DonationSites.ToList();
@@ -29,10 +29,11 @@ namespace FrontEndComplete.Controllers
                 ExpirationDate = x.ExpirationDate,
                 NumberOfUnits = x.NumberOfUnits,
                 DonationSiteID = x.DonationSiteID,
-                DonorID = x.DonorID,
                 RecipientID = x.RecipientID,
                 DonorFirstName = x.Donor.DonorFirstName,
-                SiteName = x.DonationSite.SiteName
+                SiteName = x.DonationSite.SiteName,
+                CreationDate = x.CreationDate
+
             }).ToList();
 
             ViewBag.DonationsList = listDonations;
@@ -43,122 +44,60 @@ namespace FrontEndComplete.Controllers
         }
 
         [HttpPost]
-        public ActionResult SelectDonorRecipientDonationSite(DonationModel model)
-        {
-            if(ModelState.IsValid== true)
-            {
-
-            }
-            BloodDonorDBEntities db = new BloodDonorDBEntities();
-            List<Donor> listDonor = db.Donors.ToList();
-            ViewBag.DonorsList = new SelectList(listDonor, "DonorID", "DonorFirstName");
-            List<Recipient> listRecipient = db.Recipients.ToList();
-            ViewBag.RecipientsList = new SelectList(listRecipient, "RecipientID", "RecipientCodedName");
-            List<DonationSite> listDonationSite = db.DonationSites.ToList();
-            ViewBag.DonationSiteList = new SelectList(listDonationSite, "DonationSiteID", "SiteName");
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult SaveDonationRecord(DonationModel model)
+        public ActionResult Donation(DonationModel model)
         {
             try
             {
                 BloodDonorDBEntities db = new BloodDonorDBEntities();
                 List<Donor> listDonor = db.Donors.ToList();
-                ViewBag.DonorsList = new SelectList(listDonor, "DonorID", "DonorFirstName");
-
+                ViewBag.DonorsList = new SelectList(listDonor.Where(x => x.ActiveDonor =="Yes" && x.DonorIsDeleted == false), "DonorID", "DonorFirstName");
                 List<Recipient> listRecipient = db.Recipients.ToList();
                 ViewBag.RecipientsList = new SelectList(listRecipient, "RecipientID", "RecipientCodedName");
-
                 List<DonationSite> listDonationSite = db.DonationSites.ToList();
                 ViewBag.DonationSiteList = new SelectList(listDonationSite, "DonationSiteID", "SiteName");
 
-               if (model.DonationID > 0)
+                if (model.DonationID > 0)
                 {
-                    //Update a donation
-                    Donation don = db.Donations.SingleOrDefault(x => x.DonationID == model.DonationID && x.IsDeleted == false);
-                    don.DonationID = model.DonationID;
-                    don.DonorID = model.DonorID;
-                    don.DonationType = model.DonationType;
-                    don.CrossBloodType = model.CrossBloodType;
-                    don.CrossRhFactor = model.CrossRhFactor;
-                    don.ExpirationDate = model.ExpirationDate;
-                    don.NumberOfUnits = model.NumberOfUnits;
-                    don.DonationSiteID = model.DonationSiteID;
-                    don.RecipientID = model.RecipientID;
+                    //Update a recipient
+                    Donation donation = db.Donations.SingleOrDefault(x => x.DonationID == model.DonationID && x.IsDeleted == false);
+
+                    donation.DonationType = model.DonationType;
+                    donation.CrossBloodType = model.CrossBloodType;
+                    donation.CrossRhFactor = model.CrossRhFactor;
+                    donation.NumberOfUnits = model.NumberOfUnits;
+                    donation.DonorID = model.DonorID;
+                    donation.RecipientID = model.RecipientID;
+                    donation.DonationSiteID = model.DonationSiteID;
+
                     db.SaveChanges();
                 }
                 else
                 {
-                    // Insert donation
-                    Donation don = new Donation();
-                    don.DonorID = model.DonorID;
-                    don.DonationType = model.DonationType;
-                    don.CrossBloodType = model.CrossBloodType;
-                    don.CrossRhFactor = model.CrossRhFactor;
-                    don.ExpirationDate = model.ExpirationDate;
-                    don.NumberOfUnits = model.NumberOfUnits;
-                    don.DonationSiteID = model.DonationSiteID;
-                    don.RecipientID = model.RecipientID;
-                    don.IsDeleted = false;
+                    //Insert a recipient in database
+                    Donation donation = new Donation();
+                    donation.DonationType = model.DonationType;
+                    donation.CrossBloodType = model.CrossBloodType;
+                    donation.CrossRhFactor = model.CrossRhFactor;
+                    
+                    donation.NumberOfUnits = model.NumberOfUnits;
+                    donation.DonorID = model.DonorID;
+                    donation.RecipientID = model.RecipientID;
+                    donation.DonationSiteID = model.DonationSiteID;
+                    donation.IsDeleted = false;
+                    donation.CreationDate = DateTime.Now;
+                    donation.ExpirationDate = DateTime.Now.AddDays(90);
 
-                    db.Donations.Add(don);
+                    db.Donations.Add(donation);
                     db.SaveChanges();
 
-                    int latestDonId = don.DonationID;
                 }
+
                 return View(model);
             }
-            catch(Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                throw (ex);
             }
-
-            //return RedirectToAction("SelectDonorRecipientDonationSite");
-        }
-
-        public ActionResult Donation()
-        {
-            BloodDonorDBEntities db = new BloodDonorDBEntities();
-
-            List<Donation> donationList = db.Donations.ToList();
-
-            DonationModel donationModel = new DonationModel();
-
-            List<DonationModel> donationModelList = donationList.Select(x => new DonationModel
-            {
-                DonationID = x.DonationID,
-                DonationType = x.DonationType,
-                CrossBloodType = x.CrossBloodType,
-                CrossRhFactor = x.CrossRhFactor,
-                ExpirationDate=x.ExpirationDate,
-                NumberOfUnits=x.NumberOfUnits,
-                DonationSiteID=x.DonationSiteID,
-                DonorID=x.DonorID,
-                RecipientID=x.RecipientID,
-                DonorFirstName=x.Donor.DonorFirstName,
-                SiteName=x.DonationSite.SiteName
-            }).ToList();
-
-            return View(donationModelList);
-        }
-
-        public ActionResult DonationDetail(int donationID)
-        {
-            BloodDonorDBEntities db = new BloodDonorDBEntities();
-
-            Donation donation = db.Donations.SingleOrDefault(x => x.DonationID == donationID);
-
-            DonationModel donationModel = new DonationModel();
-
-            donationModel.DonationType = donation.DonationType;
-            donationModel.CrossBloodType = donation.CrossBloodType;
-            donationModel.CrossRhFactor = donation.CrossRhFactor;
-            donationModel.DonorFirstName = donation.Donor.DonorFirstName;
-            donationModel.SiteName = donation.DonationSite.SiteName;
-
-            return View(donationModel);
         }
 
         public JsonResult DeleteDonation(int donationID)
@@ -178,7 +117,7 @@ namespace FrontEndComplete.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult ShowDonation(int DonationID)
+        public ActionResult ShowDonationDetail(int DonationID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
 
@@ -194,11 +133,13 @@ namespace FrontEndComplete.Controllers
                 DonorID = x.DonorID,
                 RecipientID = x.RecipientID,
                 DonorFirstName = x.Donor.DonorFirstName,
-                SiteName = x.DonationSite.SiteName
+                SiteName = x.DonationSite.SiteName,
+                CreationDate=x.CreationDate
+                
             }).ToList();
 
             ViewBag.DonationsList = listDonations;
-            return PartialView("Partial");
+            return PartialView("_ShowDonationDetail");
         }
 
         public ActionResult AddEditDonation(int DonationID)
@@ -206,7 +147,7 @@ namespace FrontEndComplete.Controllers
             BloodDonorDBEntities db = new BloodDonorDBEntities();
 
             List<Donor> listDonor = db.Donors.ToList();
-            ViewBag.DonorsList = new SelectList(listDonor, "DonorID", "DonorFirstName");
+            ViewBag.DonorsList = new SelectList(listDonor.Where(x => x.DonorIsDeleted == false), "DonorID", "DonorFirstName");
             List<Recipient> listRecipient = db.Recipients.ToList();
             ViewBag.RecipientsList = new SelectList(listRecipient, "RecipientID", "RecipientCodedName");
             List<DonationSite> listDonationSite = db.DonationSites.ToList();
@@ -225,10 +166,49 @@ namespace FrontEndComplete.Controllers
                 model.NumberOfUnits = donation.NumberOfUnits;
                 model.DonationSiteID = donation.DonationSiteID;
                 model.RecipientID = donation.RecipientID;
+                model.CreationDate = donation.CreationDate;
                 
             }
 
-            return PartialView("Partial2", model);
+            return PartialView("_AddEditDonation", model);
+        }
+
+        public ActionResult GetSearchDonation(string SearchText)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            List<Donor> listDonor = db.Donors.ToList();
+            ViewBag.DonorsList = new SelectList(listDonor.Where(x => x.ActiveDonor == "Yes" && x.DonorIsDeleted == false), "DonorID", "DonorFirstName");
+            List<Recipient> listRecipient = db.Recipients.ToList();
+            ViewBag.RecipientsList = new SelectList(listRecipient, "RecipientID", "RecipientCodedName");
+            List<DonationSite> listDonationSite = db.DonationSites.ToList();
+            ViewBag.DonationSiteList = new SelectList(listDonationSite, "DonationSiteID", "SiteName");
+
+            List<DonationModel> listDonations = db.Donations.Where(x => x.IsDeleted == false && x.DonationType.Contains(SearchText)|| 
+            x.CrossBloodType.Contains(SearchText)||
+            x.CrossRhFactor.Contains(SearchText)||
+            x.NumberOfUnits.ToString().Contains(SearchText)||
+            x.DonationSite.SiteName.ToString().Contains(SearchText) ||
+            x.Recipient.RecipientCodedName.Contains(SearchText) ||
+            x.Donor.DonorFirstName.Contains(SearchText)||
+            x.DonationID.ToString().Contains(SearchText)).Select(x => new DonationModel
+            {
+                DonationID = x.DonationID,
+                DonationType = x.DonationType,
+                CrossBloodType = x.CrossBloodType,
+                CrossRhFactor = x.CrossRhFactor,
+                ExpirationDate = x.ExpirationDate,
+                NumberOfUnits = x.NumberOfUnits,
+                DonationSiteID = x.DonationSiteID,
+                DonorID = x.DonorID,
+                RecipientID = x.RecipientID,
+                DonorFirstName = x.Donor.DonorFirstName,
+                SiteName = x.DonationSite.SiteName,
+                CreationDate = x.CreationDate
+
+            }).ToList();
+
+            return PartialView("_SearchDonation", listDonations);
         }
 
     }

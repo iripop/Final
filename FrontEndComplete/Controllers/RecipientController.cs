@@ -136,5 +136,24 @@ namespace FrontEndComplete.Controllers
 
         }
 
+        public ActionResult GetSearchRecipient (string SearchText)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            List<RecipientModel> listRec = db.Recipients.Where(x => x.RecipientIsDeleted == false && (x.RecipientCodedName.Contains(SearchText)||
+            x.RelatedCondition.Contains(SearchText)||
+            x.DateOfUse.ToString().Contains(SearchText)||
+            x.Donation.DonationType.Contains(SearchText))).Select(x => new RecipientModel
+            {
+                RecipientCodedName = x.RecipientCodedName,
+                DonationType = x.Donation.DonationType,
+                DateOfUse = x.DateOfUse,
+                RelatedCondition = x.RelatedCondition,
+                RecipientID = x.RecipientID
+            }).ToList();
+
+            return PartialView("_SearchRecipient", listRec);
+        }
+
     }
 }

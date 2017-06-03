@@ -12,30 +12,21 @@ namespace FrontEndComplete.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Donation
+    public partial class Image
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Donation()
+        public Image()
         {
-            this.Recipients = new HashSet<Recipient>();
+            this.Users = new HashSet<User>();
         }
     
-        public int DonationID { get; set; }
-        public string DonationType { get; set; }
-        public string CrossBloodType { get; set; }
-        public string CrossRhFactor { get; set; }
-        public System.DateTime ExpirationDate { get; set; }
-        public double NumberOfUnits { get; set; }
-        public int DonationSiteID { get; set; }
-        public Nullable<int> RecipientID { get; set; }
-        public int DonorID { get; set; }
+        public int ImageID { get; set; }
+        public string ImageName { get; set; }
+        public byte[] ImageByte { get; set; }
+        public string ImagePath { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
-        public Nullable<System.DateTime> CreationDate { get; set; }
     
-        public virtual DonationSite DonationSite { get; set; }
-        public virtual Donor Donor { get; set; }
-        public virtual Recipient Recipient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recipient> Recipients { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

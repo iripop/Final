@@ -167,5 +167,12 @@ namespace FrontEndComplete.Controllers
             })
                 smtp.Send(message);
         }
+
+        public ActionResult SideMenu()
+        {
+            List<MenuItem> list = new List<MenuItem>();
+            list.Add(new MenuItem { Link = "/Home/Registration", LinkName = "Add User" });
+            return PartialView("_SideMenu", list);
+        }
     }
 }
