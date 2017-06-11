@@ -3,23 +3,32 @@
 <div>
 
     <form id="myDonationForm">
-        @Html.HiddenFor(m => m.DonationID);
+        @Html.HiddenFor(m => m.DonationID)
 
         <p>@Html.DropDownListFor(model => model.DonorID, ViewBag.DonorsList as SelectList, "--Select a donor--", new { @class = "form-control" }) </p>
 
-        <p>@Html.TextBoxFor(model => model.DonationType, new { @class = "form-control", @placeholder = "Donation Type" }) </p>
+        <p>@Html.DropDownListFor(model => model.DonationType, ViewBag.DonationTypeList as SelectList, "--Select a donation type--", new { @class = "form-control" }) </p>
 
-        <p>@Html.TextBoxFor(model => model.CrossBloodType, new { @class = "form-control", @placeholder = "Blood Type" }) </p>
+        <p>@Html.DropDownListFor(model => model.CrossBloodType, ViewBag.BloodTypeList as SelectList, "--Blood type--", new { @class = "form-control"}) </p>
 
-        <p>@Html.TextBoxFor(model => model.CrossRhFactor, new { @class = "form-control", @placeholder = "Rh factor" }) </p>
-
-     @* <p>@Html.TextBoxFor(model => model.ExpirationDate, new { @class = "form-control", @type = "date", @placeholder = "Expiration date" }) </p>  *@
+        <p>@Html.DropDownListFor(model => model.CrossRhFactor, ViewBag.RhFactorList as SelectList, "--Rh factor--", new { @class = "form-control" }) </p>
 
         <p>@Html.TextBoxFor(model => model.NumberOfUnits, new { @class = "form-control", @placeholder = "Number of Units" }) </p>
 
-        <p>@Html.DropDownListFor(model => model.DonationSiteID, ViewBag.DonationSiteList as SelectList, "--Select a donation site--", new { @class = "form-control" }) </p>
+        <p>@Html.DropDownListFor(model => model.DonationSiteID, ViewBag.DonationSiteList as SelectList, "--Select donation site--", new { @class = "form-control" }) </p>
 
         <p>@Html.DropDownListFor(model => model.RecipientID, ViewBag.RecipientsList as SelectList, "--Select recipient--", new { @class = "form-control" }) </p>
+
+        <p>@Html.DropDownListFor(model => model.Accepted, ViewBag.IsAcceptedList as SelectList, "--Is donation accepted?--", new { @class = "form-control" }) </p>
+        
+        @if (Model.Accepted == false)
+        {
+            <p>@Html.TextBoxFor(model => model.ReasonForRejection, new { @class = "form-control", @placeholder = "Reason for rejection" }) </p>
+        }
+        else
+        {
+            @Html.HiddenFor(m => m.ReasonForRejection)
+        }
 
         <a href="#" id="btnSubmit" class="btn btn-success btn-block">
             @if (Model.DonationID > 0)
@@ -37,8 +46,9 @@
 
 </div>
 
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 <script>
-
     $(document).ready(function () {
 
         $("#btnSubmit").click(function () {
@@ -49,17 +59,17 @@
 
             $.ajax({
 
-                    type: "POST",
-                    url: "/Donation/Donation",
+                type: "POST",
+                url: "/Donation/Donation",
                 data: data,
                 success: function (response) {
                     $("#loader").hide();
                     $("#myAddEditModal").modal("hide");
                     window.location.href = "/Donation/Donation";
-                    }
+                }
 
-                });
             });
         });
+    });
 
 </script>

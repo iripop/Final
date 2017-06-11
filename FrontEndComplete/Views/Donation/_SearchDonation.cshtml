@@ -2,22 +2,23 @@
 
 @if (Model != null)
 {
-        foreach (var item in Model)
-        {
-            <tr id="row_@item.DonationID">
-                <td>@item.DonationID</td>
-                <td>@item.DonationType</td>
-                <td>@item.CrossBloodType</td>
-                <td>@item.CrossRhFactor</td>
-                <td>@item.ExpirationDate</td>
-                <td>@item.NumberOfUnits</td>
-                <td>@item.SiteName</td>
-                <td>@item.DonorFirstName</td>
-                <td>@item.RecipientCodedName</td>
-                <td>@item.CreationDate</td>
-                <td><a href="#" class="btn btn-danger" onclick="ConfirmDelete(@item.DonationID)"><i class="glyphicon glyphicon-trash"></i></a> </td>
-                <td><a href="#" class="btn btn-success" onclick="ShowDonation(@item.DonationID)"><i class="glyphicon glyphicon-eye-open"></i></a> </td>
-                <td><a href="#" class="btn btn-success" onclick="AddEditDonation(@item.DonationID)"><i class="glyphicon glyphicon-pencil"></i></a> </td>
-            </tr>
-        }
+    foreach (var item in Model)
+    {
+        <tr id="row_@item.DonationID">
+            <td>@item.DonationType</td>
+            <td>@item.CrossBloodType</td>
+            <td>@item.CrossRhFactor</td>
+            <td>@item.DonorFullName</td>
+            <td>@item.NumberOfUnits</td>
+            <td>@item.SiteName</td>
+            <td>@item.RecipientCodedName</td>
+            <td>@item.CreationDate</td>
+            <td>@item.ExpirationDate</td>
+            <td>@item.Accepted</td>
+            <td>@item.ReasonForRejection</td>
+            <td><a href="#" onclick="ConfirmDelete(@item.DonationID)"><i class="glyphicon glyphicon-trash" style="color:#FF0000;"></i></a> Delete</td>
+            <td><a href="#" onclick="ShowDonation(@item.DonationID)"><i class="glyphicon glyphicon-eye-open" style="color:#22B02C;"></i></a> Details</td>
+            <td><a href="#" onclick="AddEditDonation(@item.DonationID)"><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue;"></i></a> Edit</td>
+        </tr>
     }
+}

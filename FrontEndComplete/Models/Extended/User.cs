@@ -19,7 +19,7 @@ namespace FrontEndComplete.Models
         [DisplayName("First Name")]
         public string FirstName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Last name is required")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "First name is required")]
         [DisplayName("Last Name")]
         public string LastName { get; set; }
 
@@ -30,7 +30,7 @@ namespace FrontEndComplete.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
         [DisplayName("Password")]
-        [MinLength(8,ErrorMessage ="Minimum 8 characters required")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 

@@ -5,7 +5,7 @@
             foreach (var item in ViewBag.DonationsList)
             {
                 <tr>
-                    <td><b>Donation id</b></td>
+                    <td><b>ID</b></td>
                     <td>@item.DonationID</td>
                 </tr>
                 <tr>
@@ -21,16 +21,12 @@
                     <td>@item.CrossRhFactor</td>
                 </tr>
                 <tr>
-                    <td><b>Expiration date</b></td>
-                    <td>@item.ExpirationDate</td>
-                </tr>
-                <tr>
                     <td><b>Number of units</b></td>
                     <td>@item.NumberOfUnits</td>
                 </tr>
                 <tr>
                     <td><b>Donor</b></td>
-                    <td>@item.DonorFirstName</td>
+                    <td>@item.DonorFullName</td>
                 </tr>
                 <tr>
                     <td><b>Recipient</b></td>
@@ -43,6 +39,18 @@
                 <tr>
                     <td><b>Donation date</b></td>
                     <td>@item.CreationDate</td>
+                </tr>
+                <tr>
+                    <td><b>Expiration date</b></td>
+                    <td>@item.ExpirationDate</td>
+                </tr>
+                <tr>
+                    <td><b>Accepted donation?</b></td>
+                    <td>@item.Accepted</td>
+                </tr>
+                <tr>
+                    <td><b>Reason for rejection</b></td>
+                    <td>@item.ReasonForRejection</td>
                 </tr>
 
             }

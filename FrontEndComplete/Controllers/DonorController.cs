@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using FrontEndComplete.Models;
+using PagedList;
 
 namespace FrontEndComplete.Controllers
 {
+    [Authorize]
     public class DonorController : Controller
     {
-        public ActionResult Donor()
+        #region Donors GET
+        public ActionResult Donor(int page=1, int pageSize=4)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
 
@@ -26,24 +28,26 @@ namespace FrontEndComplete.Controllers
             {
                 DonorID=x.DonorID,
                 ActiveDonor = x.ActiveDonor,
-                DonorFirstName = x.DonorFirstName,
-                DonorLastName = x.DonorLastName,
+                DonorFullName = x.DonorFullName,
                 BloodType = x.BloodType,
                 RhFactor = x.RhFactor,
                 DateOfBirth=x.DateOfBirth,
-                Wight=x.Wight,
+                Weight=x.Weight,
                 DonorEmail=x.DonorEmail,
                 DonorPhoneNumber=x.DonorPhoneNumber,
                 LastScreeningDate=x.LastScreeningDate
 
             }).ToList();
 
-            ViewBag.DonorsList = listDonors;
+            PagedList<DonorModel> model = new PagedList<DonorModel>(listDonors, page, pageSize);
+            ViewBag.DonorsList = model;
 
-            return View();
+            return View(ViewBag.DonorsList);
 
         }
+        #endregion
 
+        #region Donors POST
         [HttpPost]
         public ActionResult Donor(DonorModel model)
         {
@@ -66,12 +70,11 @@ namespace FrontEndComplete.Controllers
                     Donor don = db.Donors.SingleOrDefault(x => x.DonorID == model.DonorID && x.DonorIsDeleted == false);
 
                     don.ActiveDonor = model.ActiveDonor;
-                    don.DonorFirstName = model.DonorFirstName;
-                    don.DonorLastName = model.DonorLastName;
+                    don.DonorFullName = model.DonorFullName;
                     don.BloodType = model.BloodType;
                     don.RhFactor = model.RhFactor;
                     don.DateOfBirth = model.DateOfBirth;
-                    don.Wight = model.Wight;
+                    don.Weight = model.Weight;
                     don.DonorEmail = model.DonorEmail;
                     don.DonorPhoneNumber = model.DonorPhoneNumber;
                     don.LastScreeningDate = model.LastScreeningDate;
@@ -84,12 +87,11 @@ namespace FrontEndComplete.Controllers
                     //Insert a recipient in database
                     Donor don = new Donor();
                     don.ActiveDonor = model.ActiveDonor;
-                    don.DonorFirstName = model.DonorFirstName;
-                    don.DonorLastName = model.DonorLastName;
+                    don.DonorFullName = model.DonorFullName;
                     don.BloodType = model.BloodType;
                     don.RhFactor = model.RhFactor;
                     don.DateOfBirth = model.DateOfBirth;
-                    don.Wight = model.Wight;
+                    don.Weight = model.Weight;
                     don.DonorEmail = model.DonorEmail;
                     don.DonorPhoneNumber = model.DonorPhoneNumber;
                     don.LastScreeningDate = model.LastScreeningDate; ;
@@ -109,7 +111,9 @@ namespace FrontEndComplete.Controllers
             }
 
         }
+        #endregion
 
+        #region Delete donor
         public JsonResult DeleteDonor(int donorID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
@@ -126,7 +130,9 @@ namespace FrontEndComplete.Controllers
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
 
+        #region Donor Details
         public ActionResult ShowDonorDetail(int DonorID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
@@ -135,16 +141,14 @@ namespace FrontEndComplete.Controllers
             {
                 DonorID = x.DonorID,
                 ActiveDonor = x.ActiveDonor,
-                DonorFirstName = x.DonorFirstName,
-                DonorLastName = x.DonorLastName,
+                DonorFullName = x.DonorFullName,
                 BloodType = x.BloodType,
                 RhFactor = x.RhFactor,
-                DateOfBirth=x.DateOfBirth,
-                Wight=x.Wight,
-                DonorEmail=x.DonorEmail,
-                DonorPhoneNumber=x.DonorPhoneNumber,
-                LastScreeningDate=x.LastScreeningDate
-               
+                DateOfBirth = x.DateOfBirth,
+                Weight = x.Weight,
+                DonorEmail = x.DonorEmail,
+                DonorPhoneNumber = x.DonorPhoneNumber,
+                LastScreeningDate = x.LastScreeningDate,
 
             }).ToList();
 
@@ -153,7 +157,9 @@ namespace FrontEndComplete.Controllers
             return PartialView("_ShowDonorDetail");
 
         }
+        #endregion
 
+        #region Add Edit donor
         public ActionResult AddEditDonor(int DonorID)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
@@ -174,12 +180,11 @@ namespace FrontEndComplete.Controllers
                 Donor don = db.Donors.SingleOrDefault(x => x.DonorID == DonorID && x.DonorIsDeleted == false);
                 model.DonorID = don.DonorID;
                 model.ActiveDonor = don.ActiveDonor;
-                model.DonorFirstName = don.DonorFirstName;
-                model.DonorLastName = don.DonorLastName;
+                model.DonorFullName = don.DonorFullName;
                 model.BloodType = don.BloodType;
                 model.RhFactor = don.RhFactor;
                 model.DateOfBirth = don.DateOfBirth;
-                model.Wight = don.Wight;
+                model.Weight = don.Weight;
                 model.DonorEmail = don.DonorEmail;
                 model.DonorPhoneNumber = don.DonorPhoneNumber;
                 model.LastScreeningDate = don.LastScreeningDate;
@@ -189,12 +194,13 @@ namespace FrontEndComplete.Controllers
             return PartialView("_AddEditDonor", model);
 
         }
+        #endregion
 
+        #region Search
         public ActionResult GetSearchDonor(string SearchText)
         {
             BloodDonorDBEntities db = new BloodDonorDBEntities();
-            List<DonorModel> list = db.Donors.Where(x=>x.DonorFirstName.Contains(SearchText)||
-            x.DonorLastName.Contains(SearchText)||
+            List<DonorModel> list = db.Donors.Where(x=>x.DonorFullName.Contains(SearchText)||
             x.ActiveDonor.Contains(SearchText)||
             x.BloodType.Contains(SearchText)||
             x.RhFactor.Contains(SearchText)||
@@ -202,12 +208,11 @@ namespace FrontEndComplete.Controllers
             {
                 DonorID = x.DonorID,
                 ActiveDonor = x.ActiveDonor,
-                DonorFirstName = x.DonorFirstName,
-                DonorLastName = x.DonorLastName,
+                DonorFullName = x.DonorFullName,
                 BloodType = x.BloodType,
                 RhFactor = x.RhFactor,
                 DateOfBirth = x.DateOfBirth,
-                Wight = x.Wight,
+                Weight = x.Weight,
                 DonorEmail = x.DonorEmail,
                 DonorPhoneNumber = x.DonorPhoneNumber,
                 LastScreeningDate = x.LastScreeningDate
@@ -216,5 +221,6 @@ namespace FrontEndComplete.Controllers
 
             return PartialView("_SearchDonor", list);
         }
+        #endregion
     }
 }

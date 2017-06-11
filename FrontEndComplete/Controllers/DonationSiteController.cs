@@ -4,83 +4,214 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FrontEndComplete.Models;
-using System.Linq.Dynamic;
+//using PagedList;
 
 namespace FrontEndComplete.Controllers
 {
+    [Authorize]
     public class DonationSiteController : Controller
     {
-        [Authorize]
-        public ActionResult DonationSite(int page = 1, string sort = "SiteName", string sortdir = "asc", string search = "")
+        #region DonationSite GET
+        public ActionResult DonationSite()
         {
-            int pageSize = 10;
-            int totalRecord = 0;
-            if (page < 1) page = 1;
-            int skip = (page * pageSize) - pageSize;
-            var data = GetDonationSites(search, sort, sortdir, skip, pageSize, out totalRecord);
-            ViewBag.TotalRows = totalRecord;
-            ViewBag.search = search;
-            return View(data);
-        }
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
 
-        public List<DonationSite> GetDonationSites(string search, string sort, string sortdir, int skip, int pageSize, out int totalRecord)
-        {
-            using (BloodDonorDBEntities db = new BloodDonorDBEntities())
+            List<string> mobile = new List<string>(new string[] { "True", "False" });
+            ViewBag.MobileSiteList = new SelectList(mobile);
+
+            List<DonationSiteModel> listDonSite = db.DonationSites.Where(x => x.IsArchived == false).Select(x => new DonationSiteModel
             {
-                var v = (from a in db.DonationSites
-                         where
-                         a.SiteName.Contains(search) ||
-                         a.EventStartDate.ToString().Contains(search) ||
-                         a.EventEndDate.ToString().Contains(search) ||
-                         a.RegistrationEmail.Contains(search) ||
-                         a.RegistrationPhone.Contains(search) ||
-                         a.Address.Contains(search) ||
-                         a.City.Contains(search) ||
-                         a.Zip.Contains(search) ||
-                         a.StaffingRequired.ToString().Contains(search) ||
-                         a.MobileSite.ToString().Contains(search)
-                         select a
-                       );
-                totalRecord = v.Count();
-                v = v.OrderBy(sort + " " + sortdir);
-                if (pageSize > 0)
-                {
-                    v = v.Skip(skip).Take(pageSize);
-                }
-                return v.ToList();
-            }
-        }
+                DonationSiteID = x.DonationSiteID,
+                SiteName = x.SiteName,
+                EventStartDate = x.EventStartDate,
+                EventEndDate = x.EventEndDate,
+                RegistrationEmail = x.RegistrationEmail,
+                RegistrationPhone = x.RegistrationPhone,
+                Address = x.Address,
+                City = x.City,
+                Zip = x.Zip,
+                StaffingRequired = x.StaffingRequired,
+                MobileSite = x.MobileSite
 
-        public ActionResult SaveDonationSiteRecord(DonationSiteModel model)
+
+            }).ToList();
+
+            ViewBag.DonationSiteList = listDonSite;
+
+            return View();
+
+        }
+        #endregion
+
+        #region Recipients POST
+        [HttpPost]
+        public ActionResult DonationSite(DonationSiteModel model)
         {
             try
             {
                 BloodDonorDBEntities db = new BloodDonorDBEntities();
 
-                DonationSite don = new DonationSite();
+                List<string> mobile = new List<string>(new string[] { "True", "False" });
+                ViewBag.MobileSiteList = new SelectList(mobile);
 
-                don.SiteName = model.SiteName;
-                don.EventStartDate = model.EventStartDate;
-                don.EventEndDate = model.EventEndDate;
-                don.RegistrationEmail = model.RegistrationEmail;
-                don.RegistrationPhone = model.RegistrationPhone;
-                don.Address = model.Address;
-                don.City = model.City;
-                don.Zip = model.Zip;
-                don.StaffingRequired = model.StaffingRequired;
-                don.MobileSite = model.MobileSite;
+                if (model.DonationSiteID > 0)
+                {
+                    //Update a donation site
+                    DonationSite don = db.DonationSites.SingleOrDefault(x => x.DonationSiteID == model.DonationSiteID && x.IsArchived == false);
 
-                db.DonationSites.Add(don);
-                db.SaveChanges();
+                    don.SiteName = model.SiteName;
+                    don.EventStartDate = model.EventStartDate;
+                    don.EventEndDate = model.EventEndDate;
+                    don.RegistrationEmail = model.RegistrationEmail;
+                    don.RegistrationPhone = model.RegistrationPhone;
+                    don.Address = model.Address;
+                    don.City = model.City;
+                    don.Zip = model.Zip;
+                    don.StaffingRequired = model.StaffingRequired;
+                    don.MobileSite = model.MobileSite;
 
-                int latestDonId = don.DonationSiteID;
+                    db.SaveChanges();
+
+                }
+                else
+                {
+                    //Insert a recipient in database
+                    DonationSite don = new DonationSite();
+                    don.SiteName = model.SiteName;
+                    don.EventStartDate = model.EventStartDate;
+                    don.EventEndDate = model.EventEndDate;
+                    don.RegistrationEmail = model.RegistrationEmail;
+                    don.RegistrationPhone = model.RegistrationPhone;
+                    don.Address = model.Address;
+                    don.City = model.City;
+                    don.Zip = model.Zip;
+                    don.StaffingRequired = model.StaffingRequired;
+                    don.MobileSite = model.MobileSite;
+                    don.IsArchived = false;
+
+                    db.DonationSites.Add(don);
+                    db.SaveChanges();
+
+                    int latestDonationSiteID = don.DonationSiteID;
+                }
+
+                return View(model);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw e;
+                throw (ex);
+            }
+        }
+        #endregion
+
+        #region Delete recipients
+        public JsonResult DeleteDonationSite(int donsiteID)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            bool result = false;
+            DonationSite don = db.DonationSites.SingleOrDefault(x => x.IsArchived == false && x.DonationSiteID == donsiteID);
+
+            if (don != null)
+            {
+                don.IsArchived = true;
+                db.SaveChanges();
+                result = true;
             }
 
-            return RedirectToAction("DonationSite");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region Recipient details
+        public ActionResult ShowDonationSiteDetail(int DonationSiteID)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            List<DonationSiteModel> listDonationSites = db.DonationSites.Where(x => x.IsArchived == false && x.DonationSiteID == DonationSiteID).Select(x => new DonationSiteModel
+            {
+                DonationSiteID = x.DonationSiteID,
+                SiteName = x.SiteName,
+                EventStartDate = x.EventStartDate,
+                EventEndDate = x.EventEndDate,
+                RegistrationEmail = x.RegistrationEmail,
+                RegistrationPhone = x.RegistrationPhone,
+                Address = x.Address,
+                City = x.City,
+                Zip = x.Zip,
+                StaffingRequired = x.StaffingRequired,
+                MobileSite = x.MobileSite
+
+            }).ToList();
+
+            ViewBag.DonationSitesList = listDonationSites;
+
+            return PartialView("_ShowDonationSiteDetail");
+
+        }
+        #endregion
+
+        #region Add or edit recipient
+        public ActionResult AddEditDonationSite(int DonationSiteID)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+
+            List<string> mobile = new List<string>(new string[] { "True", "False" });
+            ViewBag.MobileSiteList = new SelectList(mobile);
+
+            DonationSiteModel model = new DonationSiteModel();
+
+            if (DonationSiteID > 0)
+            {
+                DonationSite don = db.DonationSites.SingleOrDefault(x => x.DonationSiteID == DonationSiteID && x.IsArchived == false);
+                model.DonationSiteID = don.DonationSiteID;
+                model.SiteName = don.SiteName;
+                model.EventStartDate = don.EventStartDate;
+                model.EventEndDate = don.EventEndDate;
+                model.RegistrationEmail = don.RegistrationEmail;
+                model.RegistrationPhone = don.RegistrationPhone;
+                model.Address = don.Address;
+                model.City = don.City;
+                model.Zip = don.Zip;
+                model.StaffingRequired = don.StaffingRequired;
+                model.MobileSite = don.MobileSite;
+
+            }
+
+            return PartialView("_AddEditDonationSite", model);
+
+        }
+        #endregion
+
+        #region Search
+        public ActionResult GetSearchDonationSite(string SearchText)
+        {
+            BloodDonorDBEntities db = new BloodDonorDBEntities();
+            List<DonationSiteModel> list = db.DonationSites.Where(x => x.SiteName.Contains(SearchText) ||
+            x.Address.Contains(SearchText) ||
+            x.City.Contains(SearchText) ||
+            x.Zip.Contains(SearchText) ||
+            x.EventStartDate.ToString().Contains(SearchText)||
+            x.EventEndDate.ToString().Contains(SearchText) ||
+            x.RegistrationEmail.Contains(SearchText)||
+            x.RegistrationPhone.Contains(SearchText)||
+            x.MobileSite.ToString().Contains(SearchText)).Select(x => new DonationSiteModel
+            {
+                SiteName = x.SiteName,
+                Address = x.Address,
+                City = x.City,
+                Zip = x.Zip,
+                MobileSite = x.MobileSite,
+                EventStartDate=x.EventStartDate,
+                EventEndDate=x.EventEndDate,
+                RegistrationPhone=x.RegistrationPhone,
+                RegistrationEmail=x.RegistrationEmail
+                
+
+            }).ToList();
+
+            return PartialView("_SearchDonationSite", list);
+        }
+        #endregion
     }
 }

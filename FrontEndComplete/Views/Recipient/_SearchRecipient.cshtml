@@ -6,13 +6,14 @@
                 {
         <tr id="row_@item.RecipientID">
             <td>@item.RecipientID</td>
+            <td>@item.DonorFullName</td>
             <td>@item.DonationType</td>
             <td>@item.RecipientCodedName</td>
             <td>@item.DateOfUse</td>
             <td>@item.RelatedCondition</td>
-            <td><a href="#" class="btn btn-danger" onclick="ConfirmDelete(@item.RecipientID)"><i class="glyphicon glyphicon-trash"></i></a> </td>
-            <td><a href="#" class="btn btn-success" onclick="ShowRecipient(@item.RecipientID)"><i class="glyphicon glyphicon-eye-open"></i></a> </td>
-            <td><a href="#" class="btn btn-success" onclick="AddEditRecipient(@item.RecipientID)"><i class="glyphicon glyphicon-pencil"></i></a> </td>
+            <td><a href="#" onclick="ConfirmDelete(@item.RecipientID)"><i class="fa fa-archive" style="color:#FF0000;"></i></a> Archive</td>
+            <td><a href="#" onclick="ShowRecipient(@item.RecipientID)"><i class="glyphicon glyphicon-eye-open" style="color:#22B02C;"></i></a> Details</td>
+            <td><a href="#" onclick="AddEditRecipient(@item.RecipientID)"><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue;"></i></a> Edit</td>
         </tr>
     }
 }

@@ -1,0 +1,59 @@
+﻿@model FrontEndComplete.Models.User
+
+<div>
+
+    <form id="myUserForm">
+
+        @Html.HiddenFor(m => m.UserID)
+
+        <p>@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @placeholder = "First name" }) </p>
+
+        <p>@Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @placeholder = "Last name" }) </p>
+
+        <p>@Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", @placeholder = "Email" }) </p>
+
+        <p>@Html.TextBoxFor(model => model.PhoneNumber, new { @class = "form-control", @placeholder = "Phone number" }) </p>
+
+        <a href="#" id="btnSubmit" class="btn btn-success btn-block">
+            
+            @if (Model.UserID > 0)
+            { <span>Update</span>}
+            else
+            { <span>Save</span>}
+        </a>
+
+
+    </form>
+
+    <div style="text-align:center; display:none" id="loader">
+        <img src="~/Content/giphy-downsized.gif" width="150" />
+    </div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function () {
+
+            $("#loader").show();
+
+            var data = $("#myUserForm").serialize();
+
+            $.ajax({
+
+                    type: "POST",
+                    url: "/Manage/Users",
+                data: data,
+                success: function (response) {
+                    $("#loader").hide();
+                    $("#myAddEditModal").modal("hide");
+                    window.location.href = "/Manage/Users";
+                    }
+
+                });
+            });
+        });
+
+</script>

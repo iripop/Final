@@ -1,0 +1,18 @@
+﻿@model IEnumerable<FrontEndComplete.Models.User>
+
+@if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+        <tr id="row_@item.UserID">
+            <td>@item.UserID</td>
+            <td>@item.FirstName</td>
+            <td>@item.LastName</td>
+            <td>@item.EmailAddress</td>
+            <td>@item.PhoneNumber</td>
+            <td>@item.IsAdmin</td>
+            <td><a href="#" onclick="ConfirmDelete(@item.UserID)"><i class="glyphicon glyphicon-trash" style="color:#FF0000;"></i></a> Delete</td>
+            <td><a href="#" onclick="AddEditUser(@item.UserID)"><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue;"></i></a> Edit</td>
+        </tr>
+    }
+}

@@ -18,6 +18,7 @@ namespace FrontEndComplete.Models
         public Donation()
         {
             this.Recipients = new HashSet<Recipient>();
+            this.Donors = new HashSet<Donor>();
         }
     
         public int DonationID { get; set; }
@@ -31,11 +32,15 @@ namespace FrontEndComplete.Models
         public int DonorID { get; set; }
         public Nullable<bool> IsDeleted { get; set; }
         public Nullable<System.DateTime> CreationDate { get; set; }
+        public Nullable<bool> Accepted { get; set; }
+        public string ReasonForRejection { get; set; }
     
         public virtual DonationSite DonationSite { get; set; }
         public virtual Donor Donor { get; set; }
         public virtual Recipient Recipient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Recipient> Recipients { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Donor> Donors { get; set; }
     }
 }

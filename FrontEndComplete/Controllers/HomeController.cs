@@ -58,11 +58,12 @@ namespace FrontEndComplete.Controllers
                 #region Save data to database
                 using (BloodDonorDBEntities db = new BloodDonorDBEntities())
                 {
+                    userModel.UserIsDeleted = false;
                     db.Users.Add(userModel);
                     db.SaveChanges();
 
                     //Send email to user
-                    SendVerificationLinkEmail(userModel.EmailAddress, userModel.ActivationCode.ToString());
+                    SendVerificationLinkEmail(userModel.EmailAddress, userModel.ActivationCode.ToString(), userModel.Password);
                     message = "Registration successful. Account activation link" +
                         " has been sent to your email address:" + userModel.EmailAddress;
                     Status = true;
@@ -135,9 +136,9 @@ namespace FrontEndComplete.Controllers
         }
 
         [NonAction]
-        protected void SendVerificationLinkEmail(string userEmail, string activationCode)
+        protected void SendVerificationLinkEmail(string userEmail, string activationCode, string password)
         {
-            var verifyUrl = "/User/VerifyAccount/" + activationCode;
+            var verifyUrl = "/Home/VerifyAccount/" + activationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
             var fromEmail = new MailAddress("pop.irina1@gmail.com", "Blood donations management system");
@@ -145,7 +146,7 @@ namespace FrontEndComplete.Controllers
             var fromEmailPassword = "Frunzulitza.1"; //Replace with actual password
             string subject = "Your account is succesfully created";
             string body = "<br/><b/r>We are excited to tell you that your Blood donations management system account is" +
-                " successfully created. Please click on the link below to verify your account" +
+                " successfully created.Your current password is:"+password+" Please click on the link below to verify your account" +
                 "<b/r><br/> <a href='" + link + "'>" + link + "</a> ";
 
             var smtp = new SmtpClient
@@ -168,11 +169,5 @@ namespace FrontEndComplete.Controllers
                 smtp.Send(message);
         }
 
-        public ActionResult SideMenu()
-        {
-            List<MenuItem> list = new List<MenuItem>();
-            list.Add(new MenuItem { Link = "/Home/Registration", LinkName = "Add User" });
-            return PartialView("_SideMenu", list);
-        }
     }
 }

@@ -1,17 +1,62 @@
 ﻿@{
     ViewBag.Title = "Contact";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<address>
-    Mircea Zaciu 11<br />
-    Cluj-Napoca, 400494<br />
-    <abbr title="Phone">P:</abbr>
-    (+40)75.651.1494
-</address>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+    <section id="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="active">Contact</li>
+            </ol>
+        </div>
+    </section>
+
+    <section id="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Website Overview -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading main-color-bg">
+                            <h3 class="panel-title">Contact</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                            <br>
+
+                            <address>
+                                Mircea Zaciu 11<br />
+                                Cluj-Napoca, 400494<br />
+                                <abbr title="Phone">P:</abbr>
+                                (+40)75.651.1494
+                            </address>
+
+                            <address>
+                                <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
+                                <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
+                            </address>
+                            <p>We are here to answer any questions you may have about Blood For Life application experiences. Reach out to us and we'll respond as soon as we can.</p>
+                            <p>In case of any technical problems please contact the support</p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+   
+
+
+
+
+              
+           

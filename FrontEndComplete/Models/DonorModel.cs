@@ -9,15 +9,22 @@ namespace FrontEndComplete.Models
     {
         public int DonorID { get; set; }
         public string ActiveDonor { get; set; }
-        public string DonorFirstName { get; set; }
-        public string DonorLastName { get; set; }
+        public string DonorFullName { get; set; }
         public string BloodType { get; set; }
         public string RhFactor { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
-        public Nullable<double> Wight { get; set; }
+        public Nullable<double> Weight { get; set; }
         public string DonorEmail { get; set; }
         public string DonorPhoneNumber { get; set; }
         public Nullable<System.DateTime> LastScreeningDate { get; set; }
         public Nullable<bool> DonorIsDeleted { get; set; }
+        public Nullable<int> DonationID { get; set; }
+
+        //Custom attributes
+        public string DonationType { get; set; }
+        public string CrossBloodType { get; set; }
+        public string CrossRhFactor { get; set; }
+        public System.DateTime ExpirationDate { get; set; }
+        public double NumberOfUnits { get; set; }
     }
 }

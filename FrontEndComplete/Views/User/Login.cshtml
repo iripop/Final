@@ -7,6 +7,11 @@
 
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href="~/Content/log-in.css" rel="stylesheet" />
+<style>
+    .img-responsive{
+        width:200px;
+    }
+</style>
 <div class="main">
 
 
@@ -19,20 +24,20 @@
                     @Html.AntiForgeryToken()
                     <form action="javascript:void(0);" method="get">
                         <fieldset class="clearfix">
-                            <p><span class="fa fa-user"></span>
+                            <p><span class="fa fa-envelope"></span>
                             @Html.TextBoxFor(model => model.EmailAddress, new { @class = "form-control", placeholder="Email address" } )
-                            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger", @style = "color:yellow;" })
                                 </p> <!-- JS because of IE support; better: placeholder="Username" -->
                             <p><span class="fa fa-lock"></span>
                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control", placeholder="Password", @type="Password" })
-                           @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                           @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger", @style = "color:yellow;" })
                                 </p> <!-- JS because of IE support; better: placeholder="Password" -->
                             
                        <!-- See how I can display this
                            <div class="checkbox-success">
                                 <label>Remember me
                                     @Html.CheckBoxFor(model => model.RememberMe)
-                                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
+                                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger", @style = "color:yellow;" })
                                 </label>
                             </div>
                        -->    
@@ -41,12 +46,18 @@
                             <div>
                                 <span style="width:48%; text-align:left;  display: inline-block;">
                                     <a class="small-text" href="#">
-                                        @Html.ActionLink("Forgot password?", "Registration","Home")
+                                        @Html.ActionLink("Forgot password?", "ForgotPassword", "Manage")
                                     </a>
                                 </span>
                                 <span style="width:50%; text-align:right;  display: inline-block;"><input type="submit" value="Sign In"></span>
                             </div>
                         </fieldset>
+                       @if (ViewBag.Message != null)
+                        {
+                        <div class="alert alert-danger" style="color:yellow;">
+                            <strong>Error!</strong>@ViewBag.Message
+                        </div>
+                        }
                         <div class="clearfix"></div>
                     </form>
                 }
@@ -54,8 +65,7 @@
                     <div class="clearfix"></div>
                 </div> <!-- end login -->
                 <div class="logo">
-                    LOGO
-
+                    <img src="~/Content/Blood for Life.png" class="img-responsive"/>
                     <div class="clearfix"></div>
                 </div>
 

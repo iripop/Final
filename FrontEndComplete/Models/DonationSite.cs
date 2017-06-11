@@ -31,6 +31,7 @@ namespace FrontEndComplete.Models
         public string Zip { get; set; }
         public Nullable<int> StaffingRequired { get; set; }
         public bool MobileSite { get; set; }
+        public Nullable<bool> IsArchived { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Donation> Donations { get; set; }

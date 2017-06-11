@@ -1,7 +1,7 @@
-﻿@model FrontEndComplete.Models.DonationSiteModel
+﻿@model FrontEndComplete.Models.User
 
 @{
-    ViewBag.Title = "DonationSite";
+    ViewBag.Title = "Users";
 }
 
 <script src="~/Scripts/bootstrap.min.js"></script>
@@ -15,11 +15,11 @@
 {
     @Html.AntiForgeryToken()
 
+
     <section id="breadcrumb">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="active">Donation Sites</li>
-                <li><a href="#" onclick="AddEditDonationSite(0)"><i class="glyphicon glyphicon-plus" style="color:red;"></i> Add donation site</a></li>
+                <li class="active">System Users</li>
             </ol>
         </div>
     </section>
@@ -32,44 +32,44 @@
                     <!-- Website Overview -->
                     <div class="panel panel-default">
                         <div class="panel-heading main-color-bg">
-                            <h3 class="panel-title">Donation Site</h3>
+                            <h3 class="panel-title">Users</h3>
                         </div>
 
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    @Html.TextBoxFor(m => m.SiteName, new { @class = "form-control", @placeholder = "Search here" })
+                                    @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control", @placeholder = "Search here" })
                                     <img src="~/Content/giphy-downsized.gif" id="loaderID" height="40" width="40" style="display:none" />
                                 </div>
                             </div>
                             <br>
                             <table class="table table-responsive">
+
                                 <tr>
-                                    <th>Site name</th>
-                                    <th>Start date</th>
-                                    <th>End date</th>
+                                    <th>ID</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
                                     <th>Email</th>
                                     <th>Phone number</th>
-                                    <th>Mobile site</th>
+                                    <th>Admin</th>
                                     <th></th>
                                 </tr>
 
-                                <tbody id="donationSiteRow">
+                                <tbody id="userRow">
 
-                                    @if (ViewBag.DonationSiteList != null)
+                                    @if (ViewBag.UsersList != null)
                                     {
-                                        foreach (var item in ViewBag.DonationSiteList)
+                                        foreach (var item in ViewBag.UsersList)
                                         {
-                                            <tr id="row_@item.DonationSiteID">
-                                                <td>@item.SiteName</td>
-                                                <td>@item.EventStartDate</td>
-                                                <td>@item.EventEndDate</td>
-                                                <td>@item.RegistrationEmail</td>
-                                                <td>@item.RegistrationPhone</td>
-                                                <td>@item.MobileSite</td>
-                                                <td><a href="#" onclick="ConfirmDelete(@item.DonationSiteID)"><i class="glyphicon glyphicon-trash" style="color:#FF0000;"></i></a> Delete</td>
-                                                <td><a href="#" onclick="ShowDonationSite(@item.DonationSiteID)"><i class="glyphicon glyphicon-eye-open" style="color:#22B02C;"></i></a> Details</td>
-                                                <td><a href="#" onclick="AddEditDonationSite(@item.DonationSiteID)"><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue;"></i></a> Edit</td>
+                                            <tr id="row_@item.UserID">
+                                                <td>@item.UserID</td>
+                                                <td>@item.FirstName</td>
+                                                <td>@item.LastName</td>
+                                                <td>@item.EmailAddress</td>
+                                                <td>@item.PhoneNumber</td>
+                                                <td>@item.IsAdmin</td>
+                                                <td><a href="#" onclick="ConfirmDelete(@item.UserID)"><i class="glyphicon glyphicon-trash" style="color:#FF0000;"></i></a> Delete</td>
+                                                <td><a href="#" onclick="AddEditUser(@item.UserID)"><i class="fa fa-pencil-square-o" aria-hidden="true" style="color:blue;"></i></a> Edit</td>
                                             </tr>
                                         }
                                     }
@@ -92,11 +92,11 @@
 
                 <div class="modal-header">
                     <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3 class="modal-title">Archive donation site</h3>
+                    <h3 class="modal-title">Delete User</h3>
                 </div>
 
                 <div class="modal-body">
-                    <h4>Are you sure you want to archive this donation site?</h4>
+                    <h4>Are you sure you want to delete this user?</h4>
                     <div style="text-align:center; display:none" id="loader">
                         <img src="~/Content/giphy-downsized.gif" width="150" /> @*This is a page is loading gif*@
                     </div>
@@ -104,27 +104,7 @@
 
                 <div class="modal-footer">
                     <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                    <a href="#" class="btn btn-success" onclick="DeleteDonationSite()">Confirm</a> @*When clicking on the btn, The function DeleteDonation is called, and record is deleted from database*@
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="myShowModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3 class="modal-title">Donation site details</h3>
-                </div>
-
-                <div class="modal-body" id="showModalBody">
-
-                </div>
-
-                <div class="modal-footer">
-                    
+                    <a href="#" class="btn btn-success" onclick="DeleteUser()">Confirm</a> @*When clicking on the btn, The function DeleteDonation is called, and record is deleted from database*@
                 </div>
             </div>
         </div>
@@ -136,7 +116,7 @@
 
                 <div class="modal-header">
                     <a href="#" class="close" data-dismiss="modal">&times;</a>
-                    <h3 class="modal-title">Add or Edit Donation Site</h3>
+                    <h3 class="modal-title">Edit user details</h3>
                 </div>
 
                 <div class="modal-body" id="myAddEditModalBody">
@@ -148,9 +128,11 @@
         </div>
     </div>
 
-    <input class="hidden" id="hiddenDonationSite" />
-
+    <input class="hidden" id="hiddenUser" />
 }
+
+   
+
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
@@ -158,46 +140,37 @@
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 
     <script>
-        var ConfirmDelete = function (donationSiteID) {
+        var ConfirmDelete = function (userID) {
 
-            $("#hiddenDonationSite").val(donationSiteID);
+            $("#hiddenUser").val(userID);
             $("#myDeleteModal").modal("show");
         }
 
-        var DeleteDonationSite = function () {
+        var DeleteUser = function () {
 
             $("#loader").show();
 
-            var donID = $("#hiddenDonationSite").val();
+            var userID = $("#hiddenUser").val();
             @*--Ajax call to delete the record-- *@
             $.ajax({
 
                 type: "POST",
-                url: "/DonationSite/DeleteDonationSite",
-                data: { donationSiteID: donID },
+                url: "/Manage/DeleteUser",
+                data: { userID: userID },
                 success: function (result) {
                     $("#loader").hide();
                     $("#myDeleteModal").modal("hide");
 
                     @*--Remove the deleted row-- *@
-                    $("#row_" + donID).remove();
+                    $("#row_" + userID).remove();
                 }
             });
 
         }
 
-        var ShowDonationSite = function (donationSiteID) {
+        var AddEditUser = function (userID) {
 
-            var url = "/DonationSite/ShowDonationSiteDetail?DonationSiteID=" + donationSiteID;
-            $("#showModalBody").load(url, function () {
-                $("#myShowModal").modal("show");
-            })
-
-        }
-
-        var AddEditDonationSite = function (donationSiteID) {
-
-            var url = "/DonationSite/AddEditDonationSite?DonationSiteID=" + donationSiteID;
+            var url = "/Manage/AddEditUser?UserID=" + userID;
             $("#myAddEditModalBody").load(url, function () {
                 $("#myAddEditModal").modal("show");
             })
@@ -206,25 +179,21 @@
 
         $(document).ready(function () {
 
-            $("#SiteName").keydown(function () {
+            $("#FirstName").keydown(function () {
                 $("#loaderID").show();
                 var searchtext = $(this).val();
 
                 $.ajax({
 
                     type: "POST",
-                    url: "/DonationSite/GetSearchDonationSite?SearchText=" + searchtext,
+                    url: "/Manage/GetSearchUser?SearchText=" + searchtext,
                     contentType: "html",
                     success: function (response) {
                         $("#loaderID").hide();
-                        $("#donationSiteRow").html(response);
+                        $("#userRow").html(response);
                     }
                 })
             })
         })
     </script>
 }
-
-
-
-
